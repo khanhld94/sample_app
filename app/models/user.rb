@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 	validates :phonenumber, presence: true, format: {with: /\A0+[0-9]{1,10}\z/},
 							length:{minimum: 10, maximum: 11}
 	has_secure_password
-	validates :password, presence: true, length: {minimum: 6}
+	validates :password, presence: true, length: {minimum: 6}, allow_nil: true
 
 	def User.digest(string)
     	cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
