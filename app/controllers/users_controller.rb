@@ -16,17 +16,22 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    if User.find_by_id(params[:id]).nil?
+    flash[:danger] = "User not exist" 
+    redirect_to users_path
+    else
+    User.find_by_id(params[:id]).destroy
     flash[:success] = "User have been deleted"
     redirect_to users_path
+    end
   end
 
   def create
   	@user = User.new(user_params)
   	if @user.save
-      log_in @user
-  		flash[:success] = "Sign Up Succesfully!"
-  		redirect_to @user
+      @user.send_activation_email
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
   	else
   	render 'new'	
   	end
